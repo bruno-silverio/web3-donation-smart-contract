@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="d-flex flex-wrap justify-content-between align-items-center border-top p-3 m-5">
+    <footer className="d-flex flex-wrap justify-content-between align-items-center border-top p-3">
       <p className="col-4 mb-0 text-body-secondary">
         &copy; 2024 FinancialHelp, Inc.
       </p>

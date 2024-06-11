@@ -1,7 +1,40 @@
+"use client";
+
+import { useState } from "react";
+import { openRequest } from "@/services/Web3Service";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function Home() {
+
+  const [request, setRequest] = useState({
+    title: "",
+    description: "",
+    contact: "",
+    goal: "",
+  });
+
+  function onInputChange(evt: { target: { id: string; value: any; }; }) {
+    setRequest((prevState) => ({
+      ...prevState,
+      [evt.target.id]: evt.target.value,
+    }));
+  }
+
+  function btnSaveClick() {
+    alert("Iniciando processo de salvamento...");
+    openRequest(request)
+      .then((result) => {
+        alert("Pedido enviado com sucesso. Em alguns minutos estará disponível na página inicial.");
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        console.error(err);
+        alert(err.message);
+      });
+  }
+
   return (
     <>
       <Header />
@@ -19,6 +52,8 @@ export default function Home() {
                 id="title"
                 className="form-control"
                 maxLength={150}
+                value={request.title}
+                onChange={onInputChange}
               />
               <label htmlFor="title">Resumo do que precisa:</label>
             </div>
@@ -29,9 +64,12 @@ export default function Home() {
                 id="description"
                 className="form-control"
                 style={{ height: 100 }}
+                value={request.description}
+                onChange={onInputChange}
               ></textarea>
               <label htmlFor="description">
-                Descreva em detalhes o que precisa e onde você está (para entregas presenciais):
+                Descreva em detalhes o que precisa e onde você está (para
+                entregas presenciais):
               </label>
             </div>
           </div>
@@ -42,15 +80,24 @@ export default function Home() {
                 id="contact"
                 className="form-control"
                 maxLength={150}
+                value={request.contact}
+                onChange={onInputChange}
               />
               <label htmlFor="contact">Contato (telefone ou e-mail):</label>
             </div>
           </div>
           <div className="col-6">
             <div className="form-floating mb-3">
-              <input type="number" id="goal" className="form-control" />
+              <input
+                type="number"
+                id="goal"
+                className="form-control"
+                value={request.goal}
+                onChange={onInputChange}
+              />
               <label htmlFor="goal">
-                Meta em BNB (deixe em branco caso não deseje receber doação em cripto):
+                Meta em BNB (deixe em branco caso não deseje receber doação em
+                cripto):
               </label>
             </div>
           </div>
@@ -61,7 +108,7 @@ export default function Home() {
               </a>
             </div>
             <div className="col-5 mb-3 p-0">
-              <button type="button" className="btn btn-dark col-12 p-3">
+              <button type="button" className="btn btn-dark col-12 p-3" onClick={btnSaveClick}>
                 Enviar Pedido
               </button>
             </div>
@@ -69,6 +116,7 @@ export default function Home() {
         </div>
         <Footer />
       </div>
+      {JSON.stringify(request)}
     </>
   );
 }
